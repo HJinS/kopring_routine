@@ -1,5 +1,6 @@
 package routine.entity
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import routine.entity.common.CategoryConverter
 import routine.entity.common.CategoryEnum
 import javax.persistence.*
@@ -11,9 +12,9 @@ class Routine(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @ManyToOne
     @JoinColumn(name = "user_id")
-    val user_id: User,
+    @ManyToOne(cascade = [CascadeType.REMOVE])
+    val user: User,
 
     @Convert(converter = CategoryConverter::class)
     @Column(name = "category")
@@ -21,5 +22,4 @@ class Routine(
 
     @Column(name = "goal")
     val goal: String,
-
-    ): Base()
+): Base()

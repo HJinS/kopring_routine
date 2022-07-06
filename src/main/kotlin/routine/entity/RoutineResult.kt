@@ -1,20 +1,22 @@
 package routine.entity
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import routine.entity.common.ResultConverter
 import routine.entity.common.ResultEnum
 import javax.persistence.*
 
 
-@Table(name="routine_result")
+
 @Entity
+@Table(name="routine_result")
 class RoutineResult(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @ManyToOne
     @JoinColumn(name = "routine_id")
-    val routine_id: Routine,
+    @ManyToOne(cascade = [CascadeType.REMOVE])
+    val routine: Routine,
 
     @Convert(converter = ResultConverter::class)
     val result: ResultEnum,
@@ -24,4 +26,4 @@ class RoutineResult(
     @Column(name = "is_alarm")
     val is_alaram: Boolean,
 
-    ): Base()
+): Base()

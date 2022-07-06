@@ -5,9 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "user")
-@EntityListeners(AuditingEntityListener::class)
 class User (
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     @Column(name = "email")
@@ -16,5 +14,4 @@ class User (
     val password: String,
     @Column(name = "name")
     val name: String,
-
 ): Base()
