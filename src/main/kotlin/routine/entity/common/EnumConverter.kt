@@ -13,30 +13,24 @@ class CategoryConverter: AttributeConverter<CategoryEnum, String> {
 
 @Converter
 class ResultConverter: AttributeConverter<ResultEnum, String>{
-    override fun convertToDatabaseColumn(Category: ResultEnum): String =  Category.result
+    override fun convertToDatabaseColumn(category: ResultEnum): String =  category.result
 
     override fun convertToEntityAttribute(value: String): ResultEnum = ResultEnum.valueOf(value.uppercase())
 }
 
 @Converter
-class DayConverter: AttributeConverter<List<DayEnum>, List<Int>>{
+class DayConverter: AttributeConverter<DayEnum, Int>{
 
-    override fun convertToDatabaseColumn(day_enum_list: List<DayEnum>): List<Int> =
-        try{
-            var converted_day: MutableList<Int> = mutableListOf()
-            day_enum_list.forEach{ converted_day.add(it.day) }
-            converted_day.toList()
-        }catch (e: JsonProcessingException) {
-            throw java.lang.IllegalArgumentException()
-        }
+    override fun convertToDatabaseColumn(day: DayEnum): Int = day.day
 
-    override fun convertToEntityAttribute(day_int_list: List<Int>?): List<DayEnum> =
-        try{
-            var converted_day: MutableList<DayEnum> = mutableListOf()
-            day_int_list?.forEach{ converted_day.add(DayEnum.values()[it])}
-            converted_day.toList()
-        }catch (e: JsonProcessingException) {
-            throw java.lang.IllegalArgumentException()
-        }
-
+    override fun convertToEntityAttribute(value: Int): DayEnum = when(value){
+            0 -> DayEnum.MON
+            1 -> DayEnum.TUE
+            2 -> DayEnum.WED
+            3 -> DayEnum.THU
+            4 -> DayEnum.FRI
+            5 -> DayEnum.SAT
+            6 -> DayEnum.SUN
+        else -> {throw IllegalArgumentException("Invalid Argument")}
+    }
 }

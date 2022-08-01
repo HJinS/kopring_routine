@@ -19,6 +19,4 @@ enum class DayEnum(var day: Int){
     FRI(4),
     SAT(5),
     SUN(6);
-
-    val myDay = day
 }
