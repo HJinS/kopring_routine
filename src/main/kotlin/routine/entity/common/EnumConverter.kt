@@ -1,6 +1,5 @@
 package routine.entity.common
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
 

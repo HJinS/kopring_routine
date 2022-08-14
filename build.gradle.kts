@@ -32,6 +32,17 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.session:spring-session-core")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.4")
+    implementation("org.springdoc:springdoc-openapi-data-rest:1.6.4")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.7.2")
+    implementation("org.springframework.security:spring-security-core:5.7.2")
+    implementation("org.springframework.security:spring-security-config:5.7.2")
+    implementation("org.springframework.security:spring-security-web:5.7.2")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
+
 }
 
 allOpen {
