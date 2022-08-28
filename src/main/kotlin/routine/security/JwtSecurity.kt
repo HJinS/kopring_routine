@@ -3,37 +3,36 @@ package routine.security
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import routine.jwt.JwtFilter
-import routine.repository.UserDetailsImpl
+import routine.jwt.JwtTokenProvider
+import routine.service.UserDetailsServiceImpl
 
 
 @Configuration
 @EnableWebSecurity
 class JwtSecurity(
-    private val userDetailsService: UserDetailsImpl,
-    private val jwtFilter: JwtFilter
+    private val userDetailService: UserDetailsServiceImpl,
+    private val jwtTokenProvider: JwtTokenProvider
 ){
-
     @Bean
     public fun filterChain(http: HttpSecurity): SecurityFilterChain{
-        http.authorizeRequests()
+        http
+            .httpBasic().disable()
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
             .antMatchers("/api/members/signup", "/api/members/signin").permitAll()
             .anyRequest().authenticated()
             .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
-
-    @Bean
-    public fun webSecurityCustomizer(web: WebSecurity) = web.ignoring().antMatchers("/api/signin", "/api/siginup");
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
