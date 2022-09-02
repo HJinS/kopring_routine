@@ -8,4 +8,5 @@ import routine.entity.User
 interface UserRepository : JpaRepository<User, Long> {
     fun findByEmail(email: String) : User?
     fun existsByEmail(email: String): Boolean?
+
 }

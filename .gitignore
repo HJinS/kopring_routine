@@ -36,3 +36,13 @@ out/
 ### VS Code ###
 .vscode/
 create_db.sql
+
+private-key-refresh.pem
+public-key-refresh.pem
+private-key.pem
+public-key.pem
+
+private-access-key.pem
+public-access-key.pem
+private-refresh-key.pem
+public-refresh-key.pem
