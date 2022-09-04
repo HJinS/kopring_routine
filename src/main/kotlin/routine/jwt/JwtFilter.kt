@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest
 class JwtFilter(private val jwtUtils: JwtTokenProvider) : GenericFilterBean() {
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain){
-        val resolvedToken: Array<Cookie>? = jwtUtils.resolveToken((request as HttpServletRequest))
-        if (resolvedToken != null){
+        val resolvedToken: List<Cookie> = jwtUtils.resolveToken((request as HttpServletRequest))
+        if (resolvedToken.isNotEmpty()){
             val token: String = resolvedToken.first { it.name == "access_token " }.value
             val authentication = jwtUtils.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication

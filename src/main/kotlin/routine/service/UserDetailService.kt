@@ -13,7 +13,7 @@ import routine.repository.UserDetailsImpl
 class UserDetailsServiceImpl(private val userRepository: UserRepository) : UserDetailsService {
 
     override fun loadUserByUsername(email: String): UserDetails {
-        val user: User = userRepository.findByEmail(email) ?: throw UsernameNotFoundException("존재하지 않는 username 입니다.")
+        val user: User = userRepository.getByEmail(email) ?: throw UsernameNotFoundException("존재하지 않는 username 입니다.")
 
         return UserDetailsImpl(user)
     }

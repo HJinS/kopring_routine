@@ -14,7 +14,7 @@ class User (email: String, password: String, name: String){
     @Column(name = "id")
     val id: Long = 0
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     var email: String = email
         protected set
 

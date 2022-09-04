@@ -27,7 +27,7 @@ class JwtSecurity(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/members/signup", "/api/members/signin").permitAll()
+            .antMatchers("/user/users/login", "/user/users/register").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)

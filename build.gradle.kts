@@ -48,6 +48,8 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
     testImplementation("io.mockk:mockk:1.12.5")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
+    implementation("io.github.microutils:kotlin-logging:1.12.5")
+    implementation ("org.bouncycastle:bcprov-jdk15on:1.70")
 
 }
 
