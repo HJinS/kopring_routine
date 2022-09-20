@@ -14,11 +14,14 @@ import javax.servlet.http.HttpServletRequest
 class JwtFilter(private val jwtUtils: JwtTokenProvider) : GenericFilterBean() {
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain){
-        val resolvedToken: List<Cookie> = jwtUtils.resolveToken((request as HttpServletRequest))
-        if (resolvedToken.isNotEmpty()){
-            val token: String = resolvedToken.first { it.name == "access_token " }.value
-            val authentication = jwtUtils.getAuthentication(token)
-            SecurityContextHolder.getContext().authentication = authentication
+        val resolvedToken: List<Cookie>? = jwtUtils.resolveToken(request as HttpServletRequest)
+        // Todo token blacklist 및 refresh token check 확인
+        resolvedToken?.let { itToken ->
+            if(itToken.isNotEmpty()){
+                val token: String = itToken.first{ it.name == "accessToken "}.value
+                val authentication = jwtUtils.getAuthentication(token)
+                SecurityContextHolder.getContext().authentication = authentication
+            }
         }
         chain.doFilter(request, response)
     }

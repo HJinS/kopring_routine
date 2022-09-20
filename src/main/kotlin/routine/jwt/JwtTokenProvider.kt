@@ -57,10 +57,9 @@ class JwtTokenProvider(private val userDetailsService: UserDetailsServiceImpl) {
         .body
     }
 
-    fun parseEmail(token: String): String {
+    fun parseToken(token: String, isAccess: Boolean = true): Claims {
         val actualToken: String = getToken(token)
-        val claims: Claims = getAllClaims(actualToken)
-        return claims?.get("email").toString()
+        return getAllClaims(actualToken, isAccess)
     }
 
     private fun getSubject(token: String): String{
@@ -77,39 +76,12 @@ class JwtTokenProvider(private val userDetailsService: UserDetailsServiceImpl) {
         throw JwtException("Invalid token")
     }
 
-    fun resolveToken(request: HttpServletRequest): List<Cookie> = request.cookies.filter { it.name.endsWith("_token") }
+    fun resolveToken(request: HttpServletRequest): List<Cookie>? = request.cookies?.filter { it.name.endsWith("Token") }
 
     companion object{
         private val accessKeyPair = Keys.keyPairFor(SignatureAlgorithm.ES256)
         private val refreshKeyPair = Keys.keyPairFor(SignatureAlgorithm.ES256)
         private const val EXP_TIME: Long = 30 * 60 * 1000L
         private val SIGNATURE_ALG: SignatureAlgorithm = SignatureAlgorithm.ES256
-//        private val JWT_ACCESS_PUBLIC: ECPublicKey = getPublicKey(accessPublicPath)
-//        private val JWT_ACCESS_PRIVATE: ECPrivateKey = getPrivateKey(accessPrivatePath)
-//        private val JWT_REFRESH_PRIVATE: ECPrivateKey = getPrivateKey(refreshPrivatePath)
-//        private val JWT_REFRESH_PUBLIC: ECPublicKey = getPublicKey(refreshPublicPath)
-
-//        private fun getPublicKey(path: String): ECPublicKey{
-//            val key = String(Files.readAllBytes(Path(path)), Charset.defaultCharset())
-//            val publicKey = key.replace("-----BEGIN PUBLIC KEY-----", "")
-//                .replace(System.lineSeparator(), "")
-//                .replace("-----END PUBLIC KEY-----", "")
-//            val encodedKey: ByteArray = Base64.getDecoder().decode(publicKey)
-//            val keyFactory: KeyFactory = KeyFactory.getInstance("EC")
-//            val keySpec = X509EncodedKeySpec(encodedKey)
-//            return keyFactory.generatePublic(keySpec) as ECPublicKey
-//        }
-//
-//        private fun getPrivateKey(path: String): ECPrivateKey{
-//            val key = String(Files.readAllBytes(Path(path)), Charset.defaultCharset())
-//            val privateKey = key.replace("-----BEGIN EC PRIVATE KEY-----", "")
-//                .replace(System.lineSeparator(), "")
-//                .replace("-----END EC PRIVATE KEY-----", "")
-//            val encodedKey: ByteArray = Base64.getDecoder().decode(privateKey)
-//            val keyFactory: KeyFactory = KeyFactory.getInstance("EC")
-//            val keySpec = PKCS8EncodedKeySpec(encodedKey, "EC")
-//            val tmp = keyFactory.generatePrivate(keySpec)
-//            return tmp as ECPrivateKey
-//        }
     }
 }
