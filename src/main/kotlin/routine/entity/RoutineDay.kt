@@ -11,14 +11,14 @@ import javax.persistence.*
 @Entity
 @Table(name = "routine_day")
 @EntityListeners(AuditingEntityListener::class)
-class RoutineDay(day: DayEnum){
+class RoutineDay(day: DayEnum, routine: Routine){
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long = 0
 
     @JoinColumn(name = "routine_id")
     @ManyToOne(cascade = [CascadeType.REMOVE])
-    lateinit var routine: Routine
+    var routine: Routine = routine
 
     @Convert(converter = DayConverter::class)
     @Column(name = "day")
