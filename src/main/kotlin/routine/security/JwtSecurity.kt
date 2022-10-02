@@ -1,8 +1,8 @@
 package routine.security
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -20,13 +20,11 @@ import routine.service.UserDetailsServiceImpl
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
-class JwtSecurity {
-    @Autowired
-    private lateinit var jwtTokenProvider: JwtTokenProvider
-
-    @Autowired
-    private lateinit var userDetailService: UserDetailsServiceImpl
-
+class JwtSecurity(
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val userDetailService: UserDetailsServiceImpl,
+    private val redisTemplate: RedisTemplate<String, String>
+) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain{
         http
@@ -38,7 +36,7 @@ class JwtSecurity {
             .antMatchers("/user/users/login", "/user/users/register", "/user/users/refresh", "/user/users/tmp").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilterBefore(JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(JwtFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling()
         return http.build()
     }

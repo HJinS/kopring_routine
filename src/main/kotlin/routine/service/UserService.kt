@@ -1,7 +1,5 @@
 package routine.service
 
-import config.RedisConfig
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.HttpStatus
@@ -80,9 +78,7 @@ class UserService(
             }else{
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "두개 이상의 유저가 존재합니다.")
             }
-
         }
-
     }
 
     fun createUser(userRegisterDto: UserRegisterRequestDto): UserRegisterResponseDto{
@@ -91,8 +87,6 @@ class UserService(
         }
         val user = User.createUser(userRegisterDto, passwordEncoder)
         userRepository.save(user)
-
         return UserRegisterResponseDto(user.id, user.email)
     }
-
 }
