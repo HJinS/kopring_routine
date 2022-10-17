@@ -24,8 +24,8 @@ class JwtFilter(
         val valueOperations = redisTemplate.opsForValue()
         resolvedToken?.let { itToken ->
             if(itToken.isNotEmpty()){
-                val accessToken: String = itToken.first{ it.name == "accessToken "}.value
-                if(valueOperations.get(accessToken) == null){
+                val accessToken: String = itToken.first{ it.name == "accessToken"}.value
+                if(valueOperations.get(accessToken) != null){
                     throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not Authenticated")
                 }
                 val authentication = jwtUtils.getAuthentication(accessToken)

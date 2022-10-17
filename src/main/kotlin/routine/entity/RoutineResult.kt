@@ -12,26 +12,24 @@ import javax.persistence.*
 @Entity
 @Table(name="routine_result")
 @EntityListeners(AuditingEntityListener::class)
-class RoutineResult(result: ResultEnum, isDeleted: Boolean, isAlarm: Boolean){
+class RoutineResult(result: ResultEnum, isDeleted: Boolean, isAlarm: Boolean, routine: Routine){
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long = 0
 
     @JoinColumn(name = "routine_id")
     @ManyToOne(cascade = [CascadeType.REMOVE])
-    lateinit var routine: Routine
+    var routine: Routine = routine
 
     @Convert(converter = ResultConverter::class)
-    var result: ResultEnum = result
-        protected set
+    @Column(name = "result")
+    val result: ResultEnum = result
 
     @Column(name = "is_deleted")
-    var isDeleted: Boolean = isDeleted
-        protected set
+    val isDeleted: Boolean = isDeleted
 
     @Column(name = "is_alarm")
-    var isAlarm: Boolean = isAlarm
-        protected set
+    val isAlarm: Boolean = isAlarm
 
     @CreatedDate
     @Column(name = "created_dt")

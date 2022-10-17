@@ -50,6 +50,7 @@ class JwtTokenProvider(private val userDetailsService: UserDetailsServiceImpl) {
     // 모든 Claims 조회
     private fun getAllClaims(token: String, isAccess: Boolean = true): Claims{
         val key = if (isAccess) accessKeyPair.public else refreshKeyPair.public
+        println(token)
         return Jwts.parserBuilder()
         .setSigningKey(key)
         .build()
@@ -70,8 +71,8 @@ class JwtTokenProvider(private val userDetailsService: UserDetailsServiceImpl) {
     fun getToken(token: String): String{
         val headerAuth: String = token;
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7, headerAuth.length);
+        if (StringUtils.hasText(headerAuth)) {
+            return headerAuth
         }
         throw JwtException("Invalid token")
     }

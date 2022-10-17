@@ -12,23 +12,24 @@ import javax.persistence.*
 @Entity
 @Table(name = "routine")
 @EntityListeners(AuditingEntityListener::class)
-class Routine(goal: String, category: CategoryEnum){
+class Routine(goal: String, category: CategoryEnum, title: String, user: User){
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long = 0
 
     @JoinColumn(name = "user_id")
     @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
-    lateinit var user: User
+    var user: User = user
+
+    @Column(name = "title", length = 200)
+    val title: String = title
 
     @Convert(converter = CategoryConverter::class)
     @Column(name = "category")
-    var category: CategoryEnum = category
-        protected set
+    val category: CategoryEnum = category
 
     @Column(name = "goal")
-    var goal: String = goal
-        protected set
+    val goal: String = goal
 
     @CreatedDate
     @Column(name = "created_dt")
