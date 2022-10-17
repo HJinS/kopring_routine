@@ -1,14 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    val kotlinVersion = "1.6.21"
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
-    id("org.jetbrains.kotlin.plugin.noarg") version "1.6.21"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
-
+    id("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion
+    id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
+    idea
 }
 
 group = "routine.kotlinStudy"
@@ -51,6 +53,9 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:3.0.1")
     implementation("io.github.microutils:kotlin-logging:1.12.5")
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+    implementation("com.querydsl:querydsl-jpa:5.0.0")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 allOpen {
@@ -72,4 +77,12 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+}
+
+idea {
+    module {
+        val kaptMain = file("build/generated/source/kapt/main")
+        sourceDirs.add(kaptMain)
+        generatedSourceDirs.add(kaptMain)
+    }
 }

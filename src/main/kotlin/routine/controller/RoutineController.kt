@@ -1,30 +1,40 @@
 package routine.controller
 
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
-import routine.dto.RoutineCreateRequestDto
-import routine.dto.RoutineDayCreateDto
+import routine.dto.*
+import routine.repository.UserDetailsImpl
 import routine.service.RoutineDayService
 import routine.service.RoutineService
 
 
 @RestController
-@RequestMapping("/routine/routines")
+@RequestMapping("/routine")
 class RoutineController(
     private val routineService: RoutineService,
     private val routineDayService: RoutineDayService
 ) {
 
-    @PostMapping("/")
-    fun createRoutine(@RequestBody routineCreateRequestDto: RoutineCreateRequestDto): Map<String, Any>{
-        val routine = routineService.createRoutine(routineCreateRequestDto)
-        routineDayService.createRoutineDay(RoutineDayCreateDto(routine = routine, day = routineCreateRequestDto.day))
-        return mapOf("data" to mapOf("routine_id" to routine.id), "message" to mapOf("msg" to "  .", "status" to "ROUTINE_CREATE_OK"))
+    @PostMapping("/routines")
+    fun createRoutine(@RequestBody routineCreateRequestDto: RoutineCreateRequestDto, authentication: Authentication): ResponseEntity<CommonDatumResponseDto> {
+        val userAuth = authentication.principal as UserDetailsImpl
+        val routine = routineService.createRoutine(routineCreateRequestDto, userAuth.userId)
+        val responseDto = routineDayService.createRoutineDay(routine, RoutineDayCreateDto(routine = routine, day = routineCreateRequestDto.days))
+        return ResponseEntity.ok(responseDto)
     }
 
-    @GetMapping("/")
-    fun listRoutine(@RequestParam id: Long){
-        routineService.getRoutineList(id)
+    @GetMapping("/routines")
+    fun listRoutine(authentication: Authentication): ResponseEntity<CommonDataResponseDto>{
+        val userAuth = authentication.principal as UserDetailsImpl
+        val responseDto = routineService.listRoutine(userAuth.userId)
+        return ResponseEntity.ok(responseDto)
+    }
+
+    @GetMapping("/{routineId}")
+    fun detailRoutine(@PathVariable routineId: Long): ResponseEntity<CommonDatumResponseDto>{
+        val responseDto = routineService.detailRoutine(routineId = routineId)
+        return ResponseEntity.ok(responseDto)
     }
 }
 

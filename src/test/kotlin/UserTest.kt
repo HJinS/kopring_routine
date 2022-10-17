@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.server.ResponseStatusException
 import routine.RoutineKopringApplication
@@ -16,6 +17,7 @@ import routine.service.UserService
 
 @SpringBootTest(classes = [RoutineKopringApplication::class])
 @ContextConfiguration(classes = [(KotestConfig::class)])
+@ActiveProfiles("test")
 class UserServiceTest: DescribeSpec() {
 
     @Autowired

@@ -33,7 +33,9 @@ class JwtSecurity(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/user/users/login", "/user/users/register", "/user/users/refresh", "/user/users/tmp").permitAll()
+            .antMatchers(
+                *authWhitelist
+            ).permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(JwtFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter::class.java)
@@ -52,4 +54,18 @@ class JwtSecurity(
             .and()
             .build()
     }
+
+    private val authWhitelist = arrayOf(
+        "/user/users/login",
+        "/user/users/register",
+        "/user/users/refresh",
+        "/swagger-ui/index.html",
+        "/authenticate",
+        "/swagger-resources/**",
+        "/swagger-ui/**",
+        "/v3/api-docs",
+        "/webjars/**",
+        "/v3/api-docs/**"
+    )
+
 }

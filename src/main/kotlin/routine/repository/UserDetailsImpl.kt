@@ -24,4 +24,5 @@ class UserDetailsImpl(private val user: User) : UserDetails {
 
     override fun isEnabled(): Boolean = enabled
 
+    val userId = user.id
 }

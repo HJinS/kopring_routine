@@ -6,5 +6,4 @@ import routine.entity.RoutineDay
 
 @Repository
 interface RoutineDayRepository: JpaRepository<RoutineDay, Long> {
-
 }
