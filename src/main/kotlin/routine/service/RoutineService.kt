@@ -16,6 +16,11 @@ class RoutineService(
         return routineRepository.save(routineCreateDto.toEntity(user=user))
     }
 
+    fun updateRoutine(routineUpdateDto: RoutineUpdateRequestDto, routineId: Long): Routine{
+        val routine = routineRepository.getReferenceById(routineId)
+        return routineRepository.save(routineUpdateDto.toEntity(routine))
+    }
+
     fun listRoutine(userId: Long): CommonDataResponseDto {
         val routines = routineRepository.getRoutines(userId = userId)
         val routineDtoList = routines.map{RoutineListResponseDto(goal = it.goal, id = it.id, result = it.result, title = it.title)}
@@ -35,5 +40,10 @@ class RoutineService(
             createdDate = routineResult.createdDate,
             modifiedDate = routineResult.modifiedDate
         ), message = MessageResponseDto(msg = "조회 성공", status = "ROUTINE_DETAIL_OK"))
+    }
+
+    fun deleteRoutine(routineId: Long): CommonDatumResponseDto{
+        routineRepository.deleteById(routineId)
+        return CommonDatumResponseDto(data = RoutineDeleteResponseDto(id = routineId), message = MessageResponseDto(msg = "삭제 성공", status = "ROUTINE_DELETE_OK"))
     }
 }

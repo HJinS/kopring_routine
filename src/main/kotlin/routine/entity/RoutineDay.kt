@@ -1,5 +1,7 @@
 package routine.entity
 
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -16,8 +18,9 @@ class RoutineDay(day: DayEnum, routine: Routine){
     @Column(name = "id")
     val id: Long = 0
 
-    @JoinColumn(name = "routine_id")
     @ManyToOne(cascade = [CascadeType.REMOVE])
+    @JoinColumn(foreignKey = ForeignKey(name = "routine"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     var routine: Routine = routine
 
     @Convert(converter = DayConverter::class)

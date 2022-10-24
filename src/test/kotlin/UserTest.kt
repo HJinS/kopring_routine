@@ -1,4 +1,3 @@
-import com.tistory.eclipse4j.domain.persist.dic.KotestConfig
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.inspectors.forAll

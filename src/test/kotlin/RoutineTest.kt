@@ -2,7 +2,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.tistory.eclipse4j.domain.persist.dic.KotestConfig
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
@@ -43,6 +42,12 @@ class RoutineTest: DescribeSpec() {
 
     private var routineId by Delegates.notNull<Long>()
 
+    private val loginUrl = "/user/users/login"
+
+    private val routineListCreateUrl = "/routine/routines"
+
+    private val routineDetailDeleteUrl = "/routine/"
+
     override suspend fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
         objectMapper = Jackson2ObjectMapperBuilder.json()
@@ -58,7 +63,6 @@ class RoutineTest: DescribeSpec() {
                     val dto = UserRegisterRequestDto(email=userInfo["email"]!!, password=userInfo["password"]!!, confirmPassword= userInfo["confirmPassword"]!!, name=userInfo["name"]!!)
                     userService.createUser(dto)
 
-                    val loginUrl = "/user/users/login"
                     val content = objectMapper.writeValueAsString(LoginInfo(email=userInfo["email"]!!, password=userInfo["password"]!!))
                     val loginResponse = mockMvc.perform(MockMvcRequestBuilders.post(loginUrl)
                         .content(content)
@@ -86,7 +90,6 @@ class RoutineTest: DescribeSpec() {
             }
             context("루틴을 조회하면"){
                 it("루틴의 정보들이 반환된다"){
-                    val loginUrl = "/user/users/login"
                     val content = objectMapper.writeValueAsString(LoginInfo(email=userInfo["email"]!!, password=userInfo["password"]!!))
                     var response = mockMvc.perform(MockMvcRequestBuilders.post(loginUrl)
                         .content(content)
@@ -95,8 +98,7 @@ class RoutineTest: DescribeSpec() {
                         .andExpect(status().isOk)
                         .andReturn().response.cookies
 
-                    val routineGetUrl = "/routine/routines"
-                    response = mockMvc.perform(MockMvcRequestBuilders.get(routineGetUrl)
+                    response = mockMvc.perform(MockMvcRequestBuilders.get(routineListCreateUrl)
                         .accept(MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                         .cookie(responseCookies[0])
                         .cookie(responseCookies[1]))
@@ -113,7 +115,6 @@ class RoutineTest: DescribeSpec() {
             }
             context("루틴 디테일 정보를 조회하면"){
                 it("루틴 1개의 자세한 정보가 반환된다"){
-                    val loginUrl = "/user/users/login"
                     val content = objectMapper.writeValueAsString(LoginInfo(email=userInfo["email"]!!, password=userInfo["password"]!!))
                     var response = mockMvc.perform(MockMvcRequestBuilders.post(loginUrl)
                         .content(content)
@@ -122,8 +123,7 @@ class RoutineTest: DescribeSpec() {
                         .andExpect(status().isOk)
                         .andReturn().response.cookies
 
-                    val routineGetUrl = "/routine/${routineId}"
-                    response = mockMvc.perform(MockMvcRequestBuilders.get(routineGetUrl)
+                    response = mockMvc.perform(MockMvcRequestBuilders.get(routineDetailDeleteUrl + routineId.toString())
                         .accept(MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                         .cookie(responseCookies[0])
                         .cookie(responseCookies[1]))
@@ -141,6 +141,24 @@ class RoutineTest: DescribeSpec() {
                     daySet shouldBe routineInfo.days.toSet()
                     responseData.message.msg shouldBe "조회 성공"
                     responseData.message.status shouldBe "ROUTINE_DETAIL_OK"
+                }
+            }
+            context("루틴을 삭제하면"){
+                it("루틴이 삭제된다"){
+                    val content = objectMapper.writeValueAsString(LoginInfo(email= userInfo["email"]!!, password = userInfo["password"]!!))
+                    var response = mockMvc.perform(MockMvcRequestBuilders.post(loginUrl)
+                        .content(content)
+                        .contentType(MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8)))
+                    val responseCookies = response
+                        .andExpect(status().isOk)
+                        .andReturn().response.cookies
+
+                    response = mockMvc.perform(MockMvcRequestBuilders.delete(routineDetailDeleteUrl + routineId.toString())
+                        .accept(MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+                        .cookie(responseCookies[0])
+                        .cookie(responseCookies[1]))
+                    val routineDeleteResponse = response.andExpect(status().isNoContent).andReturn().response.contentAsString
+                    routineDeleteResponse shouldBe ""
                 }
             }
         }
@@ -175,7 +193,6 @@ class RoutineTest: DescribeSpec() {
             var message: RoutineMessage
         )
         class RoutineListData(
-            // goal = it.goal, id = it.id, result = it.result, title = it.title
             @JsonProperty("goal")
             var goal: String,
             @JsonProperty("id")

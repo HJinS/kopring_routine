@@ -11,7 +11,20 @@ data class RoutineCreateRequestDto(val title: String, val category: CategoryEnum
     fun toEntity(user: User): Routine = Routine(goal = goal, category = category, title = title, user = user)
 }
 
+data class RoutineUpdateRequestDto(val title: String?, val category: CategoryEnum?, val goal: String?, val isAlarm: Boolean?, val days: List<DayEnum>?){
+    fun toEntity(routine: Routine): Routine{
+        title?.let { routine.title = it }
+        category?.let{ routine.category = it }
+        goal?.let { routine.goal = it }
+        return routine
+    }
+}
+
 data class RoutineCreateResponseDto(val id: Long)
+
+data class RoutineUpdateResponseDto(val id: Long)
+
+data class RoutineDeleteResponseDto(val id: Long)
 
 data class RoutineListResponseDto(val goal: String, val id: Long, val result: ResultEnum?, val title: String)
 

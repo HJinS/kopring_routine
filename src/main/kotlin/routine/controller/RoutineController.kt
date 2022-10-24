@@ -20,7 +20,14 @@ class RoutineController(
     fun createRoutine(@RequestBody routineCreateRequestDto: RoutineCreateRequestDto, authentication: Authentication): ResponseEntity<CommonDatumResponseDto> {
         val userAuth = authentication.principal as UserDetailsImpl
         val routine = routineService.createRoutine(routineCreateRequestDto, userAuth.userId)
-        val responseDto = routineDayService.createRoutineDay(routine, RoutineDayCreateDto(routine = routine, day = routineCreateRequestDto.days))
+        val responseDto = routineDayService.createRoutineDay(routine, RoutineDayCreateDto(routine = routine, days = routineCreateRequestDto.days))
+        return ResponseEntity.ok(responseDto)
+    }
+
+    @PatchMapping("/{routineId}")
+    fun updateRoutine(@PathVariable routineId: Long, @RequestBody routineUpdateRequestDto: RoutineUpdateRequestDto): ResponseEntity<CommonDatumResponseDto>{
+        val routine = routineService.updateRoutine(routineUpdateRequestDto, routineId)
+        val responseDto = routineDayService.updateRoutineDay(routine, RoutineDayUpdateDto(routine = routine, days = routineUpdateRequestDto.days))
         return ResponseEntity.ok(responseDto)
     }
 
@@ -36,19 +43,10 @@ class RoutineController(
         val responseDto = routineService.detailRoutine(routineId = routineId)
         return ResponseEntity.ok(responseDto)
     }
-}
 
-/*
-*
-*
-routine CRUD
-{
-  'title': 제목,
-  'category': "MIRACLE" or "HOMEWORK",
-  'goal': 목표,
-  'is_alarm': 알람 여부,
-  'days': 루틴의 요일, list형태
+    @DeleteMapping("/{routineId}")
+    fun deleteRoutine(@PathVariable routineId: Long): ResponseEntity<CommonDatumResponseDto>{
+        routineService.deleteRoutine(routineId)
+        return ResponseEntity.noContent().build()
+    }
 }
-*
-*
-* */

@@ -1,5 +1,7 @@
 package routine.entity
 
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -17,19 +19,20 @@ class Routine(goal: String, category: CategoryEnum, title: String, user: User){
     @Column(name = "id")
     val id: Long = 0
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @ManyToOne(cascade = [CascadeType.PERSIST], fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = ForeignKey(name = "user"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     var user: User = user
 
     @Column(name = "title", length = 200)
-    val title: String = title
+    var title: String = title
 
     @Convert(converter = CategoryConverter::class)
     @Column(name = "category")
-    val category: CategoryEnum = category
+    var category: CategoryEnum = category
 
     @Column(name = "goal")
-    val goal: String = goal
+    var goal: String = goal
 
     @CreatedDate
     @Column(name = "created_dt")
