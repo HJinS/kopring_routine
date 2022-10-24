@@ -20,7 +20,7 @@ class RoutineResult(result: ResultEnum, isDeleted: Boolean, isAlarm: Boolean, ro
     val id: Long = 0
 
     @ManyToOne(cascade = [CascadeType.REMOVE])
-    @JoinColumn(foreignKey = ForeignKey(name = "routine"))
+    @JoinColumn(foreignKey = ForeignKey(name = "routine_result"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     var routine: Routine = routine
 

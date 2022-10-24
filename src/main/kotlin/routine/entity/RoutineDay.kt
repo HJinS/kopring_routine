@@ -19,7 +19,7 @@ class RoutineDay(day: DayEnum, routine: Routine){
     val id: Long = 0
 
     @ManyToOne(cascade = [CascadeType.REMOVE])
-    @JoinColumn(foreignKey = ForeignKey(name = "routine"))
+    @JoinColumn(foreignKey = ForeignKey(name = "routine_day"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     var routine: Routine = routine
 
