@@ -2,8 +2,6 @@ package routine.entity
 
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
-import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import routine.entity.common.ResultConverter
 import routine.entity.common.ResultEnum
@@ -14,7 +12,7 @@ import javax.persistence.*
 @Entity
 @Table(name="routine_result")
 @EntityListeners(AuditingEntityListener::class)
-class RoutineResult(result: ResultEnum, isDeleted: Boolean, isAlarm: Boolean, routine: Routine){
+class RoutineResult(result: ResultEnum, isDeleted: Boolean, isAlarm: Boolean, routine: Routine, createdDt: LocalDateTime, updatedDt: LocalDateTime){
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long = 0
@@ -34,11 +32,9 @@ class RoutineResult(result: ResultEnum, isDeleted: Boolean, isAlarm: Boolean, ro
     @Column(name = "is_alarm")
     val isAlarm: Boolean = isAlarm
 
-    @CreatedDate
     @Column(name = "created_dt")
-    lateinit var createdDt: LocalDateTime
+    val createdDt: LocalDateTime = createdDt
 
-    @LastModifiedDate
     @Column(name = "updated_dt")
-    lateinit var updatedDt: LocalDateTime
+    val updatedDt: LocalDateTime = updatedDt
 }

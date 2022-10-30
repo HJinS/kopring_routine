@@ -1,5 +1,6 @@
 package routine.support.impl
 
+import com.querydsl.core.Tuple
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import routine.config.QueryDslSupport
@@ -31,6 +32,13 @@ class RoutineSupportImpl(private val query: JPAQueryFactory): QueryDslSupport(Ro
             .where(routine.id.eq(routineId))
             .leftJoin(routineResult).on(routine.id.eq(routineResult.routine.id))
             .fetchJoin()
+            .leftJoin(routineDay).on(routine.id.eq(routineDay.routine.id))
+            .fetchJoin()
+            .fetch()
+
+    override fun getRoutinesWithDay(): List<Tuple> =
+        query.select(routine, routineDay.day)
+            .from(routine)
             .leftJoin(routineDay).on(routine.id.eq(routineDay.routine.id))
             .fetchJoin()
             .fetch()
