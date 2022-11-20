@@ -1,6 +1,7 @@
 package routine.support
 
 import com.querydsl.core.Tuple
+import routine.dto.RoutineDayQueryResultDto
 import routine.dto.RoutineDetailResultDto
 import routine.dto.RoutineListResponseDto
 
@@ -9,5 +10,5 @@ interface RoutineSupport {
 
     fun getRoutineDetail(routineId: Long): List<RoutineDetailResultDto>
 
-    fun getRoutinesWithDay(): List<Tuple>
+    fun getRoutinesWithDay(): List<RoutineDayQueryResultDto>
 }

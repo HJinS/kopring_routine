@@ -54,6 +54,10 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:1.12.5")
     implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
     kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 }

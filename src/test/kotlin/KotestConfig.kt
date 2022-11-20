@@ -1,16 +1,13 @@
 import io.kotest.core.config.AbstractProjectConfig
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.test.AssertionMode
-import io.kotest.extensions.spring.SpringExtension
 import io.kotest.extensions.spring.SpringTestExtension
 import io.kotest.extensions.spring.SpringTestLifecycleMode
 
-object KotestConfig : AbstractProjectConfig() {
-    override val parallelism = 3
+class KotestConfig : AbstractProjectConfig() {
+    override val parallelism = 4
     override val assertionMode = AssertionMode.Error
     override val globalAssertSoftly = true
     override val failOnIgnoredTests = false
-    override val isolationMode = IsolationMode.SingleInstance
+    override fun extensions() = listOf(SpringTestExtension(SpringTestLifecycleMode.Root))
 
-    override fun extensions() = listOf(SpringExtension, SpringTestExtension(SpringTestLifecycleMode.Root))
 }

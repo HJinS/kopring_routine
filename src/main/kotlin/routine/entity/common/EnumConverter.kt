@@ -23,13 +23,13 @@ class DayConverter: AttributeConverter<DayEnum, Int>{
     override fun convertToDatabaseColumn(day: DayEnum?): Int? = day?.day
 
     override fun convertToEntityAttribute(value: Int?): DayEnum? = when(value){
-            0 -> DayEnum.MON
-            1 -> DayEnum.TUE
-            2 -> DayEnum.WED
-            3 -> DayEnum.THU
-            4 -> DayEnum.FRI
-            5 -> DayEnum.SAT
-            6 -> DayEnum.SUN
+            1 -> DayEnum.MON
+            2 -> DayEnum.TUE
+            3 -> DayEnum.WED
+            4 -> DayEnum.THU
+            5 -> DayEnum.FRI
+            6 -> DayEnum.SAT
+            7 -> DayEnum.SUN
         else -> {null}
     }
 }

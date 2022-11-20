@@ -1,3 +1,6 @@
+package tests
+
+import KotestConfig
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.inspectors.forAll
@@ -43,7 +46,7 @@ class UserServiceTest: DescribeSpec() {
             }
             context("유저가 회원가입을 하지 않고 로그인을 하면"){
                 it("에러가 반환 된다"){
-                    val exception = shouldThrow<ResponseStatusException>{
+                    shouldThrow<ResponseStatusException>{
                         val dto = UserLoginRequestDto(email="non-user@#example.com", password="non-user-password")
                         userService.login(dto)
                     }
@@ -55,9 +58,9 @@ class UserServiceTest: DescribeSpec() {
     companion object{
         private val userInfo = {
             listOf(
-                mapOf<String, String>("email" to "test_email1@example.com", "password" to "test_password1", "confirmPassword" to "test_password1", "name" to "test_user1"),
-                mapOf<String, String>("email" to "test_email2@example.com", "password" to "test_password2", "confirmPassword" to "test_password2", "name" to "test_user2"),
-                mapOf<String, String>("email" to "test_email3@example.com", "password" to "test_password3", "confirmPassword" to "test_password3", "name" to "test_user3")
+                mapOf("email" to "test_email1@example.com", "password" to "test_password1", "confirmPassword" to "test_password1", "name" to "test_user1"),
+                mapOf("email" to "test_email2@example.com", "password" to "test_password2", "confirmPassword" to "test_password2", "name" to "test_user2"),
+                mapOf("email" to "test_email3@example.com", "password" to "test_password3", "confirmPassword" to "test_password3", "name" to "test_user3")
             )
         }
     }

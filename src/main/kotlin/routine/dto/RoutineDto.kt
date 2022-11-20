@@ -32,6 +32,8 @@ data class RoutineDetailResponseDto(val goal: String, val result: ResultEnum?, v
 
 data class RoutineDetailResultDto(val goal: String, val result: ResultEnum?, val title: String, val day: DayEnum, val category: CategoryEnum?, val createdDate: LocalDateTime, val modifiedDate: LocalDateTime)
 
+data class RoutineDayQueryResultDto(val routine: Routine, val day: DayEnum)
+
 data class MessageResponseDto(val msg: String, val status: String)
 
 data class CommonDataResponseDto(val data: List<Any>?, val message: MessageResponseDto)
