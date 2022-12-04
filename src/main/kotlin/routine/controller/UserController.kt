@@ -54,5 +54,4 @@ class UserController(private val userService: UserService){
             .build()
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString()).header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()).build()
     }
-    // Todo token blacklist 구현 -> redis  이용
 }

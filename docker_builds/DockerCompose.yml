@@ -1,42 +1,46 @@
-version: '3'
+version: '3.9'
 services:
   routine_db:
-    build:
-      context: ../
-      dockerfile: ./docker_builds/DockerFileDB
+    image: mysql:8.0.29
     container_name: routineDB
     expose:
       - "3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - --character-set-server=utf8
+      - MYSQL_DATABASE=routine_db
+      - MYSQL_USER=routine_user
+      - MYSQL_PASSWORD=routine_user
     networks:
-      - routine_net
+      - routine_network
 
   routine:
     build:
       context: ../
       dockerfile: ./docker_builds/DockerFile
     container_name: routine
+    image: routine
     expose:
-      - "8080"
+      - "8081"
     depends_on:
       - routine_db
       - routine_redis
     networks:
-      - routine_net
+      - routine_network
+    restart: always
 
   routine_nginx:
     build:
       context: ../
       dockerfile: ./docker_builds/DockerFileNginx
     container_name: routineNginx
+    image: routine_nginx
     ports:
       - "8002:80"
     depends_on:
       - routine
     networks:
-      - routine_net
+      - routine_network
 
   routine_redis:
     image: redis:7.0.5
@@ -44,8 +48,9 @@ services:
     expose:
       - "6379"
     networks:
-      - routine_net
+      - routine_network
 
 networks:
-  routine_net:
+  routine_network:
+    name: routine_network
     driver: bridge

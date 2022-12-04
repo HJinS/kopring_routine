@@ -1,5 +1,0 @@
-# Base Image
-FROM mysql:8.0.29
-
-# Copy init script
-ADD ./create_db.sql /docker-entrypoint-initdb.d/
